@@ -1,4 +1,4 @@
-module matrix
+module fort_matrix
   ! interface for c function
   interface
   subroutine matmul(n, c, a, b) bind(c, name="c_mat_mul")
@@ -34,7 +34,7 @@ end module
 
 
 program gemm_test
-  use matrix
+  use fort_matrix
   implicit none 
   type(matrix_t) :: A, B, C
   ! Below is counter integers for placeholder matmul
