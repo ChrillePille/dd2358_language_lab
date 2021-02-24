@@ -5,7 +5,7 @@ PY = python3
 
 part_1: libmatrix
 
-part_2: matrix.o gemm_fortran
+part_2: gemm_fortran
 
 part_3: gemm_pybind
 
@@ -15,7 +15,7 @@ matrix: matrix.c
 libmatrix: matrix.c
 	$(CC) -Wall -fPIC -shared -o libmatrix.so matrix.c 
 
-gemm_fortran: matrix.o gemm_code.f90
+gemm_fortran: matrix gemm_code.f90
 	$(FC) -c gemm_code.f90 -o gemm_f.o
 	$(FC) matrix.o gemm_f.o -o gemm_f_main.out
 	rm matrix.o
