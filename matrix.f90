@@ -44,6 +44,6 @@ contains
         integer :: n
         n = A%rows
         call c%init(n, n)
-        call my_matmul(n, c%data, b%data, a%data)
+        call my_matmul(n, transpose(c%data), transpose(a%data), transpose(b%data))
     end function fc_matmul
 end module
