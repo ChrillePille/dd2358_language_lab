@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 # create a new C project
 project(DD2358-lab2 VERSION 1.0
-                    DESCRIPTION "DD2358 Language Lab part 1&2"
+                    DESCRIPTION "DD2358 Language Lab"
                     LANGUAGES C Fortran CXX)
 
 # set C compiler
@@ -25,19 +25,16 @@ add_executable(gemm_test.out # our executable is the target
     gemm_test.f90
     matrix.f90)
 
-
-
-
 # set output target
 set_target_properties(cmat matrix gemm_test.out
     PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "lib/"
-    LIBRARY_OUTPUT_DIRECTORY "lib/"
-    RUNTIME_OUTPUT_DIRECTORY "bin/"
+    ARCHIVE_OUTPUT_DIRECTORY "output/"
+    LIBRARY_OUTPUT_DIRECTORY "output/"
+    RUNTIME_OUTPUT_DIRECTORY "output/"
 )
 set_target_properties(gemm_test.out
     PROPERTIES
-    Fortran_MODULE_DIRECTORY "mod/"
+    Fortran_MODULE_DIRECTORY "output/"
 )
 
 # set link libraries for targets
@@ -53,6 +50,4 @@ target_compile_features(cmat PRIVATE c_std_11)
 # set compiler options
 target_compile_options(cmat PRIVATE -Wall -O3)
 
-configure_file(run_matrix.py lib/run_matrix.py COPYONLY)
-
-install(TARGETS gemm_test.out DESTINATION bin)
+configure_file(run_matrix.py output/run_matrix.py COPYONLY)

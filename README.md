@@ -1,28 +1,31 @@
 # dd2358_language_lab
 
 ## Set-up
-I built this on WSL with gcc, gfortran, g++, anaconda (Anaconda3-5.3.1-Linux-x86_64), with an anaconda virtual environment as laid out in the cross-language tutorial, installing numpy, cython, and pybind11 in the virtual environment.
+I built this on WSL with cmake using gcc, gfortran, g++, anaconda (Anaconda3-5.3.1-Linux-x86_64), with an anaconda virtual environment as laid out in the cross-language tutorial, installing numpy, cython, and pybind11 in the virtual environment.
 
-Look at the Makefile for exact specification of make commands.
+To prepare for building the project, invoke
+```
+$ mkdir build
+$ cd build
+$ cmake ..
+```
+after which you simply invoke
+```
+$ make
+```
+in the `build/` directory to build all parts 1 - 3 of the assignment.
 
-## Part 1: `libmatrix.so`
-Build `libmatrix.so` by invoking
-```
-make part_1
-```
-which invokes the `libmatrix` target, compiling `matrix.c` into the shared library `libmatrix.so`. 
+## Part 1: `libcmat.so`
+`libcmat.so` is the shared library compiled from `matrix.c`, and can now be used to compile the next parts. 
 
-## Part 2
-Build `gemm_test.out` by invoking 
-```
-make part_2
-```
-which invokes the `gemm_fortran` target, compiling `matrix.c` and `gemm_code.f90` into and the `gemm_test.out` executable. Compiling `gemm_code.f90` also generates a '.mod' file for the `fort_matrix` module
+## Part 2: `gemm_test.out`
+`gemm_test.out` is compiled from `gemm_test.f90`, `matrix.f90`, and `libcmat.so`, also producing a fortran module file `matrix.mod`.
 
-## Part 3
-Build the module by invoking
-```make part_3```
-which invokes the `libmatrix` and `gemm_pybind` targets. This builds the necessary `libmatrix.so` library, in order to compile the python module `matrix.so`.
-After compiling the python module, we can test its performance by invoking
-```make run_matrix```
-which runs the test code written in `run_matrix.py`.
+## Part 3: `matrix.so`
+The python module file `matrix.so` is compiled as `matrix.<python_config>.so`, and can be imported as `matrix` to python code. Test the file `run_matrix.py` by doing something like the following:
+```
+$ cd output
+$ python3 run_matrix.py
+```
+
+Invoke `make clean` to purge output files, or just `rm -r build` and rebuild cmake.
