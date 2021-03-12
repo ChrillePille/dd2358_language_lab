@@ -28,8 +28,17 @@ void gemm(py::array_t<float> py_c, const py::array_t<float> py_a, const py::arra
     if (a_buffer.shape[1] != b_buffer.shape[0]) {
         throw std::runtime_error("error: a and b dimension mismatch");
     }
+    if (a_buffer.shape[0] != a_buffer.shape[1]) {
+        throw std::runtime_error("error: a is not a square matrix");
+    }
+    if (b_buffer.shape[0] != b_buffer.shape[1]) {
+        throw std::runtime_error("error: b is not a square matrix");
+    }
+    if (c_buffer.shape[0] != c_buffer.shape[1]) {
+        throw std::runtime_error("error: c is not a square matrix");
+    }
     if (a_buffer.shape[0] != c_buffer.shape[0] || b_buffer.shape[1] != c_buffer.shape[1]) {
-        throw std::runtime_error("error: bad c shape");
+        throw std::runtime_error("error: shape mismatch between a, b, and c");
     }
 
     // get pointers to internal buffers
@@ -37,13 +46,11 @@ void gemm(py::array_t<float> py_c, const py::array_t<float> py_a, const py::arra
     float *b = (float*)b_buffer.ptr;
     float *c = (float*)c_buffer.ptr;
 
-    // get bounds
-    int i_bound = c_buffer.shape[0];
-    int j_bound = c_buffer.shape[1];
-    int k_bound = a_buffer.shape[1];
+    // get bound
+    int n = a_buffer.shape[1];
 
     // do matmul (now in c!)
-    np_matmul(c, a, b, i_bound, j_bound, k_bound);
+    c_mat_mul(n, c, a, b);
 
 
     // do matmul in cpp
