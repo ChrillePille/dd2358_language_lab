@@ -29,15 +29,20 @@ add_executable(gemm_test.out # our executable is the target
 
 
 # set output target
-set_target_properties(cmat 
+set_target_properties(cmat matrix gemm_test.out
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "lib/"
     LIBRARY_OUTPUT_DIRECTORY "lib/"
     RUNTIME_OUTPUT_DIRECTORY "bin/"
 )
+set_target_properties(gemm_test.out
+    PROPERTIES
+    Fortran_MODULE_DIRECTORY "mod/"
+)
 
 # set link libraries for targets
 target_link_libraries(gemm_test.out PRIVATE cmat)
+target_link_libraries(matrix PRIVATE cmat)
 
 # define header file path
 target_include_directories(cmat PRIVATE .)
@@ -47,3 +52,7 @@ target_compile_features(cmat PRIVATE c_std_11)
 
 # set compiler options
 target_compile_options(cmat PRIVATE -Wall -O3)
+
+configure_file(run_matrix.py lib/run_matrix.py COPYONLY)
+
+install(TARGETS gemm_test.out DESTINATION bin)
